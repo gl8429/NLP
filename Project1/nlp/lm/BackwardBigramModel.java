@@ -9,7 +9,7 @@ import java.util.*;
  * with a unigram model for smoothing.
 */
 
-public class BigramModel {
+public class BackwardBigramModel {
 
     /** Unigram model that maps a token to its unigram probability */
     public Map<String, DoubleValue> unigramMap = null; 
@@ -30,7 +30,7 @@ public class BigramModel {
     /** Initialize model with empty hashmaps with initial
      *  unigram entries for setence start (<S>), sentence end (</S>)
      *  and unknown tokens */
-    public BigramModel() {
+    public BackwardBigramModel() {
 	unigramMap = new HashMap<String, DoubleValue>();
 	bigramMap = new HashMap<String, DoubleValue>();
 	unigramMap.put("<S>", new DoubleValue());
@@ -50,7 +50,9 @@ public class BigramModel {
     /** Accumulate unigram and bigram counts for these sentences */
     public void trainSentences (List<List<String>> sentences) {
 	for (List<String> sentence : sentences) {
-	    trainSentence(sentence);
+	    List<String> reverseSentence = new ArrayList<String>(sentence);
+	    Collections.reverse(reverseSentence);
+	    trainSentence(reverseSentence);
 	}
     }
 
@@ -202,6 +204,9 @@ public class BigramModel {
     
     /* Compute log probability of sentence given current model */
     public double sentenceLogProb (List<String> sentence) {
+	List<String> reverseSentence = new ArrayList<String>(sentence);
+	Collections.reverse(reverseSentence);
+	sentence = reverseSentence;
 	// Set start-sentence as initial token
 	String prevToken = "<S>";
 	// Maintain total sentence prob as sum of individual token
@@ -252,6 +257,9 @@ public class BigramModel {
     
     /** Like sentenceLogProb but excludes predicting end-of-sentence when computing prob */
     public double sentenceLogProb2 (List<String> sentence) {
+	List<String> reverseSentence = new ArrayList<String>(sentence);
+	Collections.reverse(reverseSentence);
+	sentence = reverseSentence;
 	String prevToken = "<S>";
 	double sentenceLogProb = 0;
 	for (String token : sentence) {
@@ -272,6 +280,9 @@ public class BigramModel {
     /** Returns vector of probabilities of predicting each token in the sentence
      *  including the end of sentence */
     public double[] sentenceTokenProbs (List<String> sentence) {
+	List<String> reverseSentence = new ArrayList<String>(sentence);
+	Collections.reverse(reverseSentence);
+	sentence = reverseSentence;
 	// Set start-sentence as initial token
 	String prevToken = "<S>";
 	// Vector for storing token prediction probs
@@ -349,7 +360,7 @@ public class BigramModel {
 			   ") \n# Test Sentences = " + testSentences.size() +
 			   " (# words = " + wordCount(testSentences) + ")");
 	// Create a bigram model and train it.
-	BigramModel model = new BigramModel();
+	BackwardBigramModel model = new BackwardBigramModel();
 	System.out.println("Training...");
 	model.train(trainSentences);
 	// Test on training data using test and test2
