@@ -4,8 +4,8 @@ import java.io.*;
 import java.util.*;
 
 /** 
- * @author Ray Mooney
- * A simple bigram language model that uses simple fixed-weight interpolation
+ * @author Guangyu Lin
+ * A simple backwardbigram language model that uses simple fixed-weight interpolation
  * with a unigram model for smoothing.
 */
 
@@ -50,6 +50,7 @@ public class BackwardBigramModel {
     /** Accumulate unigram and bigram counts for these sentences */
     public void trainSentences (List<List<String>> sentences) {
 	for (List<String> sentence : sentences) {
+	    /** Reverse the sentence to implement backward */
 	    List<String> reverseSentence = new ArrayList<String>(sentence);
 	    Collections.reverse(reverseSentence);
 	    trainSentence(reverseSentence);
@@ -204,6 +205,7 @@ public class BackwardBigramModel {
     
     /* Compute log probability of sentence given current model */
     public double sentenceLogProb (List<String> sentence) {
+        /** Reverse the sentence to implement backward */
 	List<String> reverseSentence = new ArrayList<String>(sentence);
 	Collections.reverse(reverseSentence);
 	sentence = reverseSentence;
@@ -257,6 +259,7 @@ public class BackwardBigramModel {
     
     /** Like sentenceLogProb but excludes predicting end-of-sentence when computing prob */
     public double sentenceLogProb2 (List<String> sentence) {
+        /** Reverse the sentence to implement backward */
 	List<String> reverseSentence = new ArrayList<String>(sentence);
 	Collections.reverse(reverseSentence);
 	sentence = reverseSentence;
@@ -280,6 +283,7 @@ public class BackwardBigramModel {
     /** Returns vector of probabilities of predicting each token in the sentence
      *  including the end of sentence */
     public double[] sentenceTokenProbs (List<String> sentence) {
+        /** Reverse the sentence to implement backward */
 	List<String> reverseSentence = new ArrayList<String>(sentence);
 	Collections.reverse(reverseSentence);
 	sentence = reverseSentence;
