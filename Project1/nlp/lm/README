@@ -1,0 +1,43 @@
+Name: Guangyu Lin
+EID: gl8429
+
+Directry Structure:
+--HW--|
+      |--nlp--|
+              |--lm--|
+                     |--README
+       	             |--BackwardBigramModel.java(NEW)
+                     |--BidirectionalBigramModel.java(NEW)
+                     |--BigramModel.java(ORIGINAL)
+                     |--BigramModel.java(ORIGINAL)
+                     |--POSTaggedFile.java(ORIGINAL)
+                     |--OutputTrace--|
+                                     |BackwardBigramModelResult
+                                     |--BidirectionalBigramModelResult
+                     |--report.pdf
+
+Description of each file:
+
+README:
+	Description of all files
+
+*.java:
+	Source code of two different implementation
+
+.*Result:
+	Results of both models
+
+report.pdf:
+	Final report and disscussion of the experimental results
+
+Execute Instruction:
+1.Compile all java file first:javac *.java
+2.Execute two models on different datasets.
+    Example:
+ 	If you would like to execeute your dataset with BirdirectionalBigramModel, you could input the scripts like below.
+        `java -cp "your current path"  nlp.lm.BidirectionalBigramModel "your dataset path" "your ratio of testing"`
+
+ 	If you would like to execeute your dataset with BackwardBigramModel, you could input the scripts like below.
+        `java -cp "your current path"  nlp.lm.BackwardBigramModel "your dataset path" "your ratio of testing"`
+
+
