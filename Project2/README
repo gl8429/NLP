@@ -1,0 +1,8 @@
+Environment For El Captain
+	Try `brew update` `brew doctor` first
+	If it doesn't work, reinstall homebrew again by
+		`ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"`
+		`ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+	Then everything workswell.
+
+ 
