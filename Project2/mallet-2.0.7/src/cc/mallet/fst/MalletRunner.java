@@ -187,7 +187,10 @@ public class MalletRunner {
 
         int iterations = 500;
 
-        PrintWriter writter = new PrintWriter(train_dir.substring(train_dir.length() - 6) + "-" + model +".txt");
+        PrintWriter writter = new PrintWriter(train_dir.substring(train_dir.length() - 6) + "-" + model
+                + "-extra" + extra + "-iter" + iterations + ".txt");
+
+        double time = 0, train = 0, test = 0, oov = 0;
 
         for (int i = 0; i < folds; ++i) {
             double timeStarted = System.currentTimeMillis();
@@ -224,12 +227,18 @@ public class MalletRunner {
             writter.println("Training Time: " + (timeTrained - timeStarted) / 1000.0 + "\n"
                     + "Testing Time: " + (timeEnded - timeTrained) / 1000.0 + "\n" + "Total Time: "
                     + (timeEnded - timeStarted) / 1000.0);
+            time += (timeEnded - timeStarted) / 1000.0;
             writter.println("Training sentence: " + trainInstances.size());
             writter.println("Test sentence: " + testInstances.size());
             writter.println("Training Accuracy: " + trainingAcc[0]);
+            train += trainingAcc[0];
             writter.println("Test Accuracy: " + testAcc[0]);
+            test += testAcc[0];
             writter.println("OOV Accuracy: " + testAcc[1]);
+            oov += testAcc[1];
         }
+        writter.println("\nAverage time: " + time / folds + "\nTraining Accuracy: " + train / folds
+                + "\nTest Accuracy: " + test / folds + "\noov: " + oov / folds);
         writter.close();
     }
 }
