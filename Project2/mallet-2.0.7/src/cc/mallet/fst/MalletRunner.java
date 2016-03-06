@@ -179,15 +179,16 @@ public class MalletRunner {
 		String model = args[0].toLowerCase();
 		String train_dir = args[1];
 		String test_dir = args[2];
-		double train_rate = Double.parseDouble(args[3]);
+		Double train_rate = Double.parseDouble(args[3]);
         Boolean extra = (args[4].equals("1"));
         Boolean reverse = args[5].equals("1");
 		int folds = Integer.parseInt(args[6]);
         if (test_dir.equals("none")) test_dir = null;
+        else train_rate = null;
 
         int iterations = 500;
 
-        PrintWriter writter = new PrintWriter(train_dir.substring(train_dir.length() - 6) + "-" + model +".txt");
+        PrintWriter writter = new PrintWriter(train_dir.substring(train_dir.lastIndexOf('/') + 1) + "-" + model +".txt");
 
         for (int i = 0; i < folds; ++i) {
             double timeStarted = System.currentTimeMillis();
