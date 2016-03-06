@@ -222,7 +222,7 @@ public class MalletRunner {
 
 
 
-            writter.println("============== " + i + " =============");
+            writter.println("\n\n============== " + i + " =============\n");
             writter.println("Training Time: " + (timeTrained - timeStarted) / 1000.0 + "\n"
                     + "Testing Time: " + (timeEnded - timeTrained) / 1000.0 + "\n" + "Total Time: "
                     + (timeEnded - timeStarted) / 1000.0);
