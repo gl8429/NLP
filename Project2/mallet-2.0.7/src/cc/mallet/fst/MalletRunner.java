@@ -179,11 +179,12 @@ public class MalletRunner {
 		String model = args[0].toLowerCase();
 		String train_dir = args[1];
 		String test_dir = args[2];
-		double train_rate = Double.parseDouble(args[3]);
+		Double train_rate = Double.parseDouble(args[3]);
         Boolean extra = (args[4].equals("1"));
         Boolean reverse = args[5].equals("1");
 		int folds = Integer.parseInt(args[6]);
         if (test_dir.equals("none")) test_dir = null;
+        else train_rate = null;
 
         int iterations = 500;
 
