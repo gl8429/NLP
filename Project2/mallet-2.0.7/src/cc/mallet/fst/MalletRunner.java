@@ -5,6 +5,7 @@ package cc.mallet.fst;
 import cc.mallet.pipe.Pipe;
 import cc.mallet.types.*;
 
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -48,16 +49,16 @@ class OOVTokenAccuracyEvaluator extends TokenAccuracyEvaluator {
                 seq.add(new String[]{tokens[j], (String)gold_labels.get(j), (String) output_labels.get(j)});
             }
 
-            totalTokens += seq.size();
             List<String[]> oov_seq = new ArrayList<String[]>();
             for (String[] s : seq) {
+                totalTokens++;
                 if (!vocabulary.contains(s[0])) {
+                    totalOOV++;
                     oov_seq.add(s);
                     if (s[2].equals(s[1])) numCorrectOOV++;
                 }
                 if (s[2].equals(s[1])) numCorrectTokens++;
             }
-            totalOOV += oov_seq.size();
         }
         double acc = ((double) numCorrectTokens) / totalTokens;
         double ovv_acc = ((double) numCorrectOOV) / totalOOV;
@@ -124,7 +125,7 @@ public class MalletRunner {
     }
 
     public static List<List<String>> getTrainTestSentences(String trainDirectory, String testDirectory, Double trainProportion,
-                                                           Boolean extraFeatures, Boolean reverse) throws Exception{
+                                                           Boolean extraFeatures, Boolean reverse, Long randomSeed) throws Exception{
 
         List<String> sentences_train = null;
         List<String> sentences_test = null;
@@ -133,6 +134,7 @@ public class MalletRunner {
             List<String> sentences = Arrays.asList(trainingFile.split("\n{2,}"));
             int numSentences = sentences.size();
             int trainingCount = (int)Math.round(trainProportion * numSentences);
+            if (randomSeed != null) Collections.shuffle(sentences, new Random(randomSeed));
             sentences_train = sentences.subList(0, trainingCount);
             sentences_test = sentences.subList(trainingCount, numSentences);
         } else if (testDirectory != null){
@@ -185,13 +187,16 @@ public class MalletRunner {
 
         int iterations = 500;
 
+        PrintWriter writter = new PrintWriter("atis-" + model + ".txt");
+
 		for (int i = 0; i < folds; ++i) {
 			double timeStarted = System.currentTimeMillis();
 			Pipe simplePipe;
 			if (model.equals("crf")) simplePipe = new SimpleTagger.SimpleTaggerSentence2FeatureVectorSequence();
 			else simplePipe = new HMMSimpleTagger.HMMSimpleTaggerSentence2FeatureSequence();
 			simplePipe.getTargetAlphabet().lookupIndex("0");
-			List<List<String>> allSentences = getTrainTestSentences(train_dir, test_dir, train_rate, extra, reverse);
+			List<List<String>> allSentences = getTrainTestSentences(train_dir, test_dir, train_rate, extra,
+                    reverse, System.nanoTime());
             InstanceList trainInstances = convertToInstance(allSentences.get(0), simplePipe);
             Set<String> trainVocabulary = new HashSet<String>();
             for (String vocabulary : toStringArray(simplePipe.getDataAlphabet().toArray())) trainVocabulary.add(vocabulary);
@@ -215,15 +220,19 @@ public class MalletRunner {
 
             double timeEnded = System.currentTimeMillis();
 
-            System.out.println("Training Time: " + (timeTrained - timeStarted) / 1000.0 + "\n"
+
+
+            writter.println("============== " + i + " =============");
+            writter.println("Training Time: " + (timeTrained - timeStarted) / 1000.0 + "\n"
                     + "Testing Time: " + (timeEnded - timeTrained) / 1000.0 + "\n" + "Total Time: "
                     + (timeEnded - timeStarted) / 1000.0);
-            System.out.println("Training sentence: " + trainInstances.size());
-            System.out.println("Test sentence: " + testInstances.size());
-            System.out.println("Training Accuracy: " + trainingAcc[0]);
-            System.out.println("Test Accuracy: " + testAcc[0]);
-            System.out.println("OOV Accuracy: " + testAcc[1]);
+            writter.println("Training sentence: " + trainInstances.size());
+            writter.println("Test sentence: " + testInstances.size());
+            writter.println("Training Accuracy: " + trainingAcc[0]);
+            writter.println("Test Accuracy: " + testAcc[0]);
+            writter.println("OOV Accuracy: " + testAcc[1]);
 		}
+        writter.close();
 
 	}
 }
