@@ -124,8 +124,8 @@ public class MalletRunner {
         return res;
     }
 
-    public static List<List<String>> getTrainTestSentences(String trainDirectory, String testDirectory, Double trainProportion,
-                                                           Boolean extraFeatures, Boolean reverse, Long randomSeed) throws Exception{
+    public static List<List<String>> getTrainTestSentences(String trainDirectory, String testDirectory, Double trainProportion
+            , Boolean extraFeatures, Boolean reverse, Long randomSeed)throws Exception{
 
         List<String> sentences_train = null;
         List<String> sentences_test = null;
@@ -189,13 +189,13 @@ public class MalletRunner {
 
         PrintWriter writter = new PrintWriter("atis-" + model + ".txt");
 
-		for (int i = 0; i < folds; ++i) {
-			double timeStarted = System.currentTimeMillis();
-			Pipe simplePipe;
-			if (model.equals("crf")) simplePipe = new SimpleTagger.SimpleTaggerSentence2FeatureVectorSequence();
-			else simplePipe = new HMMSimpleTagger.HMMSimpleTaggerSentence2FeatureSequence();
-			simplePipe.getTargetAlphabet().lookupIndex("0");
-			List<List<String>> allSentences = getTrainTestSentences(train_dir, test_dir, train_rate, extra,
+        for (int i = 0; i < folds; ++i) {
+            double timeStarted = System.currentTimeMillis();
+            Pipe simplePipe;
+            if (model.equals("crf")) simplePipe = new SimpleTagger.SimpleTaggerSentence2FeatureVectorSequence();
+            else simplePipe = new HMMSimpleTagger.HMMSimpleTaggerSentence2FeatureSequence();
+            simplePipe.getTargetAlphabet().lookupIndex("0");
+            List<List<String>> allSentences = getTrainTestSentences(train_dir, test_dir, train_rate, extra,
                     reverse, System.nanoTime());
             InstanceList trainInstances = convertToInstance(allSentences.get(0), simplePipe);
             Set<String> trainVocabulary = new HashSet<String>();
@@ -220,8 +220,6 @@ public class MalletRunner {
 
             double timeEnded = System.currentTimeMillis();
 
-
-
             writter.println("\n\n============== " + i + " =============\n");
             writter.println("Training Time: " + (timeTrained - timeStarted) / 1000.0 + "\n"
                     + "Testing Time: " + (timeEnded - timeTrained) / 1000.0 + "\n" + "Total Time: "
@@ -231,8 +229,7 @@ public class MalletRunner {
             writter.println("Training Accuracy: " + trainingAcc[0]);
             writter.println("Test Accuracy: " + testAcc[0]);
             writter.println("OOV Accuracy: " + testAcc[1]);
-		}
+        }
         writter.close();
-
-	}
+    }
 }
