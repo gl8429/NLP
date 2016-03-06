@@ -183,11 +183,11 @@ public class MalletRunner {
         Boolean extra = (args[4].equals("1"));
         Boolean reverse = args[5].equals("1");
 		int folds = Integer.parseInt(args[6]);
-        test_dir = null;
+        if (test_dir.equals("none")) test_dir = null;
 
         int iterations = 500;
 
-        PrintWriter writter = new PrintWriter("atis-" + model + ".txt");
+        PrintWriter writter = new PrintWriter(train_dir.substring(train_dir.length() - 6) + "-" + model +".txt");
 
         for (int i = 0; i < folds; ++i) {
             double timeStarted = System.currentTimeMillis();
