@@ -187,7 +187,7 @@ public class MalletRunner {
         else train_rate = null;
 
         int iterations = 500;
-        
+
         PrintWriter writter = new PrintWriter(train_dir.substring(train_dir.lastIndexOf('/') + 1) + "-" + model
                 + "-extra" + extra + "-iter" + iterations + ".txt");
 
