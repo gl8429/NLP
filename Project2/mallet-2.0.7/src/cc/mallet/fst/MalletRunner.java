@@ -119,11 +119,14 @@ public class MalletRunner {
 
     public static List<String> tagToken(String token) {
         List<String> res = new ArrayList<String>();
+        int index;
         if (token.length() < 4) res.add("SHORT");
         if (token.charAt(0) >= 'A' && token.charAt(0) <= 'Z') res.add("CAPS");
-        if (token.substring(token.length() - 3).equals("ing")) res.add("ING");
+        index = token.length() - 3 >= 0 ? token.length() - 3 : 0;
+        if (token.substring(index).equals("ing")) res.add("ING");
         if (token.substring(token.length() - 1).equals("s")) res.add("S");
-        if (token.substring(token.length() - 2).equals("ed")) res.add("PAST");
+        index = token.length() - 2 >= 0 ? token.length() - 2 : 0;
+        if (token.substring(index).equals("ed")) res.add("PAST");
         return res;
     }
 
