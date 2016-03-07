@@ -122,11 +122,11 @@ public class MalletRunner {
         int index;
         if (token.length() < 4) res.add("SHORT");
         if (token.charAt(0) >= 'A' && token.charAt(0) <= 'Z') res.add("CAPS");
-//        index = token.length() - 3 >= 0 ? token.length() - 3 : 0;
-//        if (token.substring(index).equals("ing")) res.add("ING");
-//        if (token.substring(token.length() - 1).equals("s")) res.add("S");
-//        index = token.length() - 2 >= 0 ? token.length() - 2 : 0;
-//        if (token.substring(index).equals("ed")) res.add("PAST");
+        index = token.length() - 3 >= 0 ? token.length() - 3 : 0;
+        if (token.substring(index).equals("ing")) res.add("ING");
+        if (token.substring(token.length() - 1).equals("s")) res.add("S");
+        index = token.length() - 2 >= 0 ? token.length() - 2 : 0;
+        if (token.substring(index).equals("ed")) res.add("PAST");
         return res;
     }
 
@@ -195,7 +195,7 @@ public class MalletRunner {
         int iterations = 500;
 
         PrintWriter writter = new PrintWriter(train_dir.substring(train_dir.lastIndexOf('/') + 1) + "-" + model
-                + "-extra" + extra + "-iter" + iterations + ".txt");
+                + "-extra" + extra + "-iter" + iterations + "-re" + reverse +".txt");
 
         double time = 0, train = 0, test = 0, oov = 0;
 
