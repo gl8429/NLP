@@ -1,0 +1,125 @@
+
+
+============== 0 =============
+
+Training Time: 66.185
+Testing Time: 0.538
+Total Time: 66.723
+Training sentence: 462
+Test sentence: 115
+Training Accuracy: 0.9985726520125606
+Test Accuracy: 0.9423529411764706
+OOV Accuracy: 0.5384615384615384
+
+
+============== 1 =============
+
+Training Time: 48.921
+Testing Time: 0.371
+Total Time: 49.292
+Training sentence: 462
+Test sentence: 115
+Training Accuracy: 0.998592738530819
+Test Accuracy: 0.96
+OOV Accuracy: 0.6666666666666666
+
+
+============== 2 =============
+
+Training Time: 65.81
+Testing Time: 0.384
+Total Time: 66.194
+Training sentence: 462
+Test sentence: 115
+Training Accuracy: 0.9979861910241657
+Test Accuracy: 0.9612314709236032
+OOV Accuracy: 0.5714285714285714
+
+
+============== 3 =============
+
+Training Time: 62.525
+Testing Time: 0.347
+Total Time: 62.872
+Training sentence: 462
+Test sentence: 115
+Training Accuracy: 0.9988636363636364
+Test Accuracy: 0.9507803121248499
+OOV Accuracy: 0.5
+
+
+============== 4 =============
+
+Training Time: 61.721
+Testing Time: 0.361
+Total Time: 62.082
+Training sentence: 462
+Test sentence: 115
+Training Accuracy: 0.9988655700510494
+Test Accuracy: 0.9528415961305925
+OOV Accuracy: 0.2222222222222222
+
+
+============== 5 =============
+
+Training Time: 65.294
+Testing Time: 0.324
+Total Time: 65.618
+Training sentence: 462
+Test sentence: 115
+Training Accuracy: 0.9991276533876127
+Test Accuracy: 0.9431072210065645
+OOV Accuracy: 0.34782608695652173
+
+
+============== 6 =============
+
+Training Time: 62.148
+Testing Time: 0.325
+Total Time: 62.473
+Training sentence: 462
+Test sentence: 115
+Training Accuracy: 0.9997106481481481
+Test Accuracy: 0.9186176142697882
+OOV Accuracy: 0.5
+
+
+============== 7 =============
+
+Training Time: 63.917
+Testing Time: 0.322
+Total Time: 64.239
+Training sentence: 462
+Test sentence: 115
+Training Accuracy: 0.998570611778159
+Test Accuracy: 0.935672514619883
+OOV Accuracy: 0.2857142857142857
+
+
+============== 8 =============
+
+Training Time: 67.737
+Testing Time: 0.339
+Total Time: 68.076
+Training sentence: 462
+Test sentence: 115
+Training Accuracy: 0.9988694177501414
+Test Accuracy: 0.9263803680981595
+OOV Accuracy: 0.4166666666666667
+
+
+============== 9 =============
+
+Training Time: 81.542
+Testing Time: 0.369
+Total Time: 81.911
+Training sentence: 462
+Test sentence: 115
+Training Accuracy: 0.9982866933181039
+Test Accuracy: 0.9377203290246768
+OOV Accuracy: 0.4444444444444444
+
+Average time: 64.94800000000001
+Training Accuracy: 0.9987445812364397
+Test Accuracy: 0.9428704367374587
+oov: 0.4493430482560917
