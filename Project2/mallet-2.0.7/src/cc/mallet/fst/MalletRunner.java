@@ -87,7 +87,8 @@ class OOVTokenAccuracyEvaluator extends TokenAccuracyEvaluator {
         }
         double acc = ((double) numCorrectTokens) / totalTokens;
         double ovv_acc = ((double) numCorrectOOV) / totalOOV;
-        return new Double[]{acc, ovv_acc};
+        double oov_per = ((double) totalOOV) / totalTokens;
+        return new Double[]{acc, ovv_acc, oov_per};
     }
 }
 
@@ -257,9 +258,9 @@ public class MalletRunner {
 
     /** Input arguments should clearly define as following,
      *  1. models: HMM or CRF
-     *  2. training directory
+     *  2. training file
      *  3. training proportion,
-     *  4. test directory,
+     *  4. test file,
      *  5. extra features: 1(Yes) or 0(No)
      *  6. forward model: 1(Yes) or 0(No)
      *  7. folds: repeat times
@@ -285,7 +286,7 @@ public class MalletRunner {
                 + "-extra" + extra + "-iter" + iterations + "-re" + reverse +".txt");
 
         // calculate the average when more than 1 run
-        double time = 0, train = 0, test = 0, oov = 0;
+        double time = 0, train = 0, test = 0, oov = 0, oov_per = 0;
 
         for (int i = 0; i < folds; ++i) {
             // record the start time
@@ -346,10 +347,13 @@ public class MalletRunner {
             test += testAcc[0];
             writter.println("OOV Accuracy: " + testAcc[1]);
             oov += testAcc[1];
+            writter.println("OOV Percentage: " + testAcc[2]);
+            oov_per += testAcc[2];
         }
         // output average data
         writter.println("\nAverage time: " + time / folds + "\nTraining Accuracy: " + train / folds
-                + "\nTest Accuracy: " + test / folds + "\noov: " + oov / folds);
+                + "\nTest Accuracy: " + test / folds + "\noov: " + oov / folds
+                + "\noov-percentage: " + oov_per / folds);
         writter.close();
     }
 }
