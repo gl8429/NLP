@@ -3,6 +3,8 @@ package nlp.lm;
 import java.io.*;
 import java.util.*;
 
+import java.io.PrintWriter;
+
 /** 
  *
  * @author Ray Mooney
@@ -11,7 +13,7 @@ import java.util.*;
  * into simple untagged Lists of sentences which are Lists of String tokens.
 */
 
-public class POSTaggedFile {
+public class Preprocess {
 
     /** The name of the LDC POS file */
     public File file = null;
@@ -19,7 +21,7 @@ public class POSTaggedFile {
     protected BufferedReader reader = null;
 
     /** Create an object for a given LDC POS tagged file */
-    public POSTaggedFile(File file) {
+    public Preprocess(File file) {
 	this.file = file;
 	try {
 	    this.reader = new BufferedReader(new FileReader(file));
@@ -140,7 +142,7 @@ public class POSTaggedFile {
 	    File file = files[i];
 	    if (!file.isDirectory()) {
 		if (!file.getName().contains("CHANGES.LOG"))
-		    sentences.addAll(new POSTaggedFile(file).tokenLists());
+		    sentences.addAll(new Preprocess(file).tokenLists());
 	    }
 	    else 
 	    {
@@ -155,12 +157,18 @@ public class POSTaggedFile {
     /** Convert LDC POS tagged files to just lists of tokens for each setences 
      *  and print them out. */
     public static void main(String[] args) throws IOException {
-	File[] files = new File[args.length];
-	for (int i = 0; i < files.length; i++) 
-	    files[i] = new File(args[i]);
-	List<List<String>> sentences = 	convertToTokenLists(files);	
-	System.out.println("# Sentences=" + sentences.size());	
-	System.out.println(sentences);	
+		File[] files = new File[args.length];
+		for (int i = 0; i < files.length; i++) 
+		    files[i] = new File(args[i]);
+		PrintWriter writer = new PrintWriter("mallet-data.txt");
+		List<List<String>> sentences = 	convertToTokenLists(files);
+		for (int i = 0; i < sentences.size(); ++i) {
+			for (int j = 0; j < sentences.get(i).size(); ++j) {
+				writer.println(sentences.get(i).get(j));
+			}
+			writer.println();
+		}
+		writer.close();
     }
 
 }

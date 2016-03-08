@@ -1,3 +1,11 @@
+====== README ========
+
+@author: Guangyu Lin
+@email: glin@utexas.edu
+@eid: gl8429
+
+Title: Readme file of homework 2
+
 Environment For El Captain
 	Try `brew update` `brew doctor` first
 	If it doesn't work, reinstall homebrew again by
@@ -5,4 +13,39 @@ Environment For El Captain
 		`ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
 	Then everything workswell.
 
- 
+
+How to run?
+	1.
+	  You can run `javac Preprocess` first
+	  then `java Preprocess "directary name"`
+	  It will generate a file name `mallet-data`, which can be used by mallet.
+	2.
+	  Copy and paste MalletRunner.java into your "mallet-2.0.7/src/cc/mallet/fst/"
+	  the you can run it as below,
+
+	  java -cp "mallet-2.0.7/class:mallet-2.0.7/lib/mallet-deps.jar"
+	  cc.mallet.fst.MalletRunner
+	  `modles` `training file` `training proportion` `test file` `extra features` `forward model` `folds`
+
+	  * models: HMM or CRF
+	  * training proportion: (0,1)
+ 	  * extra features: 1(Yes) or 0(No)
+  	  * forward model: 1(Yes) or 0(No)
+	  * folds: repeat times >= 1
+	3.
+	  Then you can check the output in mallet-2.0.7 directory
+
+Output Trace?
+	The output trace will be generated automatically.
+	e.g. wsj_00-crf-extratrue-iter500-reture.txt
+	dataset name, section number, model name, extra features?, iterations, forward model?
+	
+	Additionally, for some short time test, I run 10 times and calculate the average.
+
+	The output trace includes below:
+		round of folds, training time, testing time, total time, training sentence, test sentence, training accuracy,
+		test accuracy, oov accuracy, oov percentage
+		In the end,
+		Average time, training accuracy, test accuracy, oov accuracy, oov percentage.
+
+If you have any questions, please contact me directly ;) 
