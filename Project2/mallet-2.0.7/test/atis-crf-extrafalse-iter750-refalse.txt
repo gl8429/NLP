@@ -1,0 +1,19 @@
+
+
+============== 0 =============
+
+Training Time: 90.799
+Testing Time: 0.762
+Total Time: 91.561
+Training sentence: 462
+Test sentence: 115
+Training Accuracy: 0.9985779294653014
+Test Accuracy: 0.9175627240143369
+OOV Accuracy: 0.28205128205128205
+OOV Percentage: 0.04659498207885305
+
+Average time: 91.561
+Training Accuracy: 0.9985779294653014
+Test Accuracy: 0.9175627240143369
+oov: 0.28205128205128205
+oov-percentage: 0.04659498207885305

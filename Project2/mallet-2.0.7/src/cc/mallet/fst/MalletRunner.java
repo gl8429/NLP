@@ -279,7 +279,7 @@ public class MalletRunner {
         else train_rate = null;
 
         // initial iterations is set as 500
-        int iterations = 500;
+        int iterations = 900;
 
         // write result into a file and give an identity name
         PrintWriter writter = new PrintWriter(train_dir.substring(train_dir.lastIndexOf('/') + 1) + "-" + model
