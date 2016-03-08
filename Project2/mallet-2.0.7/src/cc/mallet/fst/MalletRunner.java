@@ -258,10 +258,11 @@ public class MalletRunner {
     /** Input arguments should clearly define as following,
      *  1. models: HMM or CRF
      *  2. training directory
-     *  3. training directory, test directory,
-     *  4. extra features: 1(Yes) or 0(No)
-     *  5. forward model: 1(Yes) or 0(No)
-     *  6. folds: repeat times
+     *  3. training proportion,
+     *  4. test directory,
+     *  5. extra features: 1(Yes) or 0(No)
+     *  6. forward model: 1(Yes) or 0(No)
+     *  7. folds: repeat times
       */
 
 	public static void main(String[] args) throws Exception{
