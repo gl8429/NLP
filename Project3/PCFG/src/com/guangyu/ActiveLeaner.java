@@ -28,25 +28,25 @@ public class ActiveLeaner {
 
     private final static Options lpOptions = new Options();
 
-    private final static int[] SEED_SIZE = {1000, 2000, 3000, 4000, 5000, 7000, 10000, 13000, 16000, 20000, 25000, 30000, 35000};
-//private final static int[] SEED_SIZE = {20, 40};
+//    private final static int[] SEED_SIZE = {1000, 2000, 3000, 4000, 5000, 7000, 10000, 13000, 16000, 20000, 25000, 30000, 35000};
+    private final static int[] SEED_SIZE = {20, 40};
 
-    private final static int[] SELF_TRAINING = {1000, 2000, 3000, 4000, 5000, 7000, 10000, 13000, 17000, 21000};
-//    private final static int[] SELF_TRAINING = {20, 40};
+//    private final static int[] SELF_TRAINING = {1000, 2000, 3000, 4000, 5000, 7000, 10000, 13000, 17000, 21000};
+    private final static int[] SELF_TRAINING = {20, 40};
 
-    private final static String[] WSJ_DIRS = {"02", "03", "04", "05", "06", "07", "08", "09", "10", "11"
-            , "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"};
-//    private final static String[] WSJ_DIRS = {"02"};
+//    private final static String[] WSJ_DIRS = {"02", "03", "04", "05", "06", "07", "08", "09", "10", "11"
+//            , "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"};
+    private final static String[] WSJ_DIRS = {"02"};
 
-    private final static String[] BROWN_DIRS = {"cf", "cg", "ck", "cl", "cm", "cn", "cp", "cr"};
-//    private final static String[] BROWN_DIRS = {"cf"};
+//    private final static String[] BROWN_DIRS = {"cf", "cg", "ck", "cl", "cm", "cn", "cp", "cr"};
+    private final static String[] BROWN_DIRS = {"cf"};
 
     private final static double RATE = 0.9;
 
 //    private final static int LABELED = 10000;
     private final static int LABELED = 40;
 
-    private final static String PATH = "/Users/Lucifer/Documents/GraduateStudy/NLP/hw3_corpus/";
+    private final static String PATH = "/Users/cid-garry/Documents/NLP/hw3_corpus/";
 
     public static void setLpOptions(Options lpOptions) {
         lpOptions.doDep = false;
@@ -130,7 +130,7 @@ public class ActiveLeaner {
 
         setLpOptions(lpOptions);
 
-        PrintWriter writer = new PrintWriter("output_trace.txt");
+        PrintWriter writer = new PrintWriter("output_trace_1.txt");
         writer.println("\nNormal training and testing on WSJ.\n");
         wsj_no_wsj(writer);
         writer.println("\nNormal training on WSJ and testing on Brown.\n");
@@ -138,66 +138,48 @@ public class ActiveLeaner {
         writer.println("\nUnsupervised domain adaption by normal training on WSJ, \nself-training on Brown, and " +
                 "then testing on Brown\n");
         wsj_brown_brown(writer);
-        writer.println("Self training");
-        self_training_diff(writer);
-//        writer.println("\nUnsupervised domain adaption by normal training on Brown, \nself-training on WSJ, and " +
-//                "then testing on WSJ\n");
-//        brown_wsj_wsj(writer);
+        writer.close();
 
+        writer = new PrintWriter("output_trace_selfBrown.txt");
+        writer.println("Self training of Brown");
+        selfTrainingBrown(writer);
+        writer.close();
+
+        writer = new PrintWriter("output_trace_2.txt");
+        writer.println("\nNormal training and testing on Brown.\n");
+        brown_no_brown(writer);
+        writer.println("\nNormal training on Brown and testing on WSJ.\n");
+        brown_no_wsj(writer);
+        writer.println("\nUnsupervised domain adaption by normal training on Brown, \nself-training on WSJ, and " +
+                "then testing on WSJ\n");
+        brown_wsj_wsj(writer);
+        writer.close();
+
+        writer = new PrintWriter("output_trace_selfWSJ.txt");
+        writer.println("Self training of WSJ");
+        selfTrainingWSJ(writer);
         writer.close();
     }
 
     public static void wsj_no_wsj(PrintWriter writer){
         List<Map<String, String>> results = new ArrayList<Map<String, String>>();
 
-        List<List<Tree>> initials = prepareWSJ_initial();
+        List<List<Tree>> initials = prepare_initial("/wsj/", WSJ_DIRS, SEED_SIZE);
 
         List<Tree> unlabeled = new ArrayList<Tree>();
 
         MemoryTreebank test = new MemoryTreebank();
         test.loadPath(PATH + "wsj/23");
         test.textualSummary();
-        for (List<Tree> current : initials) {
-            Map<String, String> result = iterate(current, unlabeled, test);
-            result.put("seedSize", current.size() + "");
-            results.add(result);
-        }
-        printResults(results, writer);
+
+        printResults(computeEachSeed(initials, unlabeled, test), writer);
         System.out.println("Finished all seeds set.");
     }
 
-    public static List<List<Tree>> prepareWSJ_initial() {
-        List<List<Tree>> initials = new ArrayList<List<Tree>>();
-        MemoryTreebank wsj = new MemoryTreebank();
-        for (String dir : WSJ_DIRS) {
-            String tmp = PATH + "wsj/" + dir;
-            wsj.loadPath(tmp);
-        }
-        wsj.textualSummary();
-        int index = 0;
-        List<Tree> initial = new ArrayList<Tree>();
-        for (int seed : SEED_SIZE) {
-            while (initial.size() < seed) {
-                if (isTrainable(wsj.get(index))) initial.add(wsj.get(index));
-                index++;
-            }
-            initials.add(new ArrayList<Tree>(initial));
-        }
-        return initials;
-    }
-
-    public static List<Tree> prepareWSJ_initial(int size) {
-        List<List<Tree>> initials = prepareWSJ_initial();
-        int index;
-        for (index = 0; index < SEED_SIZE.length; index++) {
-            if (SEED_SIZE[index] == size) break;
-        }
-        return initials.get(index);
-    }
-
     public static void brown_wsj_wsj(PrintWriter writer) {
-        List<Map<String, String>> results = new ArrayList<Map<String, String>>();
-        List<List<Tree>> initials = prepareBrown_initial();
+        List<List<Tree>> data = separateBrown();
+        List<Tree> seedSet = data.get(0);
+        List<List<Tree>> initials = prepareFroBrown(seedSet);
 
         List<Tree> unlabeled = new ArrayList<Tree>();
 
@@ -214,63 +196,62 @@ public class ActiveLeaner {
         MemoryTreebank test = new MemoryTreebank();
         test.loadPath(PATH + "wsj/23");
         test.textualSummary();
-        for (List<Tree> initial : initials) {
-            Map<String, String> result = iterate(initial, unlabeled, test);
-            result.put("seedSize", initial.size() + "");
-            results.add(result);
-        }
-        printResults(results, writer);
+
+        printResults(computeEachSeed(initials, unlabeled, test), writer);
         System.out.println("Finished all seed set.");
     }
 
     public static void brown_no_brown(PrintWriter writer) {
+        List<List<Tree>> data = separateBrown();
+        List<Tree> seedSet = data.get(0);
+        List<List<Tree>> initials = prepareFroBrown(seedSet);
+
+        List<Tree> unlabeled = new ArrayList<Tree>();
+
+        List<Tree> testList = data.get(1);
+        Treebank test = wrapTreebank(testList);
+
+        printResults(computeEachSeed(initials, unlabeled, test), writer);
+        System.out.println("Finished all seeds set");
 
     }
 
-    public static List<List<Tree>> prepareBrown_initial() {
-        List<List<Tree>> initials = new ArrayList<List<Tree>>();
+    public static void brown_no_wsj(PrintWriter writer) {
+        List<List<Tree>> data = separateBrown();
+        List<Tree> seedSet = data.get(0);
+        List<List<Tree>> initials = prepareFroBrown(seedSet);
 
-        MemoryTreebank brown = new MemoryTreebank();
-        for (String dir : BROWN_DIRS) {
-            String cur = PATH + "brown/" + dir;
-            brown.loadPath(cur);
-        }
-        brown.textualSummary();
+        List<Tree> unlabeled = new ArrayList<Tree>();
+
+        MemoryTreebank test = new MemoryTreebank();
+        test.loadPath(PATH + "wsj/23");
+        test.textualSummary();
+
+        printResults(computeEachSeed(initials, unlabeled, test), writer);
+        System.out.println("Finished all seeds set");
+    }
+
+    public static List<List<Tree>> prepareFroBrown(List<Tree> dataSet) {
+        List<List<Tree>> initials = new ArrayList<List<Tree>>();
         int index = 0;
         List<Tree> initial = new ArrayList<Tree>();
+
         for (int seed : SELF_TRAINING) {
-            while (initial.size() < seed) {
-                if (isTrainable(brown.get(index))) initial.add(brown.get(index));
-                index++;
-            }
-            initials.add(initial.subList(0, seed));
+            while (initial.size() < seed)
+                initial.add(dataSet.get(index++));
+            initials.add(new ArrayList<>(initial));
         }
         return initials;
     }
 
-
-    public static List<Tree> prepareBrown_initial(int size) {
-        List<List<Tree>> initials = prepareBrown_initial();
-        int index;
-        for (index = 0; index < SELF_TRAINING.length; index++) {
-            if (SELF_TRAINING[index] == size) break;
-        }
-        return initials.get(index);
-    }
-
-    public static void self_training_diff(PrintWriter writer) {
+    public static void selfTrainingBrown(PrintWriter writer) {
         List<Map<String, String>> results = new ArrayList<Map<String, String>>();
-        List<Tree> initial = prepareWSJ_initial(LABELED);
+        List<Tree> initial = prepare_initial("/wsj/", WSJ_DIRS, SEED_SIZE, LABELED);
 
-        List<Tree> unlabeled = new ArrayList<Tree>();
-        List<Tree> test = new ArrayList<Tree>();
+        List<List<Tree>> brownDataSet = separateBrown();
 
-        for (String dir : BROWN_DIRS) {
-            String cur = PATH + "brown/" + dir;
-            List<List<Tree>> data = brownTrainTest(cur);
-            unlabeled.addAll(data.get(0));
-            test.addAll(data.get(1));
-        }
+        List<Tree> unlabeled = brownDataSet.get(0);
+        List<Tree> test = brownDataSet.get(1);
 
         for (int i : SELF_TRAINING) {
             Map<String, String> result = iterate(initial, unlabeled.subList(0, i), wrapTreebank(test));
@@ -281,33 +262,101 @@ public class ActiveLeaner {
         System.out.println("Finished all self training set.");
     }
 
-    public static void wsj_no_brown(PrintWriter writer){
+    public static void selfTrainingWSJ(PrintWriter writer) {
+        List<List<Tree>> data = separateBrown();
+        List<Tree> initial = data.get(0).subList(0, LABELED);
+
+        List<List<Tree>> unlabeled = prepare_initial("/wsj/", WSJ_DIRS, SEED_SIZE);
+
+        MemoryTreebank test = new MemoryTreebank();
+        test.loadPath(PATH + "wsj/23");
+        test.textualSummary();
+
+        printResults(computeEachSelfTraining(initial, unlabeled, test), writer);
+        System.out.println("Finished all self training set.");
+
+    }
+
+    public static List<Map<String, String>> computeEachSelfTraining(List<Tree> initial, List<List<Tree>> unlabeleds, Treebank test) {
         List<Map<String, String>> results = new ArrayList<Map<String, String>>();
-        List<List<Tree>> initials = prepareWSJ_initial();
-
-        List<Tree> unlabeled = new ArrayList<Tree>();
-        List<Tree> test = new ArrayList<Tree>();
-
-        for (String dir : BROWN_DIRS) {
-            String cur = PATH + "brown/" + dir;
-            List<List<Tree>> data = brownTrainTest(cur);
-            test.addAll(data.get(1));
-        }
-
-        for (List<Tree> current : initials) {
-            int size = current.size();
-            Map<String, String> result = iterate(current, unlabeled, wrapTreebank(test));
-            result.put("seedSize", size + "");
+        for (List<Tree> unlabeled : unlabeleds) {
+            int size = initial.size();
+            Map<String, String> result = iterate(initial, unlabeled, test);
+            result.put("selfTraining", size + "");
             results.add(result);
         }
-        printResults(results, writer);
+        return results;
+    }
+
+    public static List<List<Tree>> prepare_initial(String name, String[] dirs, int[] seeds) {
+        List<List<Tree>> initials = new ArrayList<List<Tree>>();
+        MemoryTreebank data = new MemoryTreebank();
+        for (String dir : dirs) {
+            String tmp = PATH + name + dir;
+            data.loadPath(tmp);
+        }
+        data.textualSummary();
+        int index = 0;
+        List<Tree> initial = new ArrayList<Tree>();
+        for (int seed : seeds) {
+            while (initial.size() < seed) {
+                if (isTrainable(data.get(index))) initial.add(data.get(index));
+                index++;
+            }
+            initials.add(new ArrayList<Tree>(initial));
+        }
+        return initials;
+    }
+
+    public static List<Tree> prepare_initial(String name, String[] dirs, int[] seeds, int size) {
+        List<List<Tree>> initials = prepare_initial(name, dirs, seeds);
+        int index;
+        for (index = 0; index < seeds.length; index++) {
+            if (seeds[index] == size) break;
+        }
+        return initials.get(index);
+    }
+
+    public static void wsj_no_brown(PrintWriter writer){
+        List<List<Tree>> initials = prepare_initial("/wsj/", WSJ_DIRS, SEED_SIZE);
+
+        List<List<Tree>> brownDataSet = separateBrown();
+
+        List<Tree> unlabeled = new ArrayList<Tree>();
+        List<Tree> testList = brownDataSet.get(1);
+
+        Treebank test = wrapTreebank(testList);
+
+        printResults(computeEachSeed(initials, unlabeled, test), writer);
         System.out.println("Finished all seeds set");
     }
 
     public static void wsj_brown_brown(PrintWriter writer){
-        List<Map<String, String>> results = new ArrayList<Map<String, String>>();
-        List<List<Tree>> initials = prepareWSJ_initial();
+        List<List<Tree>> initials = prepare_initial("/wsj/", WSJ_DIRS, SEED_SIZE);
 
+        List<List<Tree>> brownDataSet = separateBrown();
+
+        List<Tree> unlabeled = brownDataSet.get(0);
+        List<Tree> testList = brownDataSet.get(1);
+        Treebank test = wrapTreebank(testList);
+
+        printResults(computeEachSeed(initials, unlabeled, test), writer);
+        System.out.println("Finished all seeds set.");
+    }
+
+    private static List<Map<String, String>> computeEachSeed(List<List<Tree>> initials, List<Tree> unlabeled, Treebank test) {
+        List<Map<String, String>> results = new ArrayList<Map<String, String>>();
+
+        for (List<Tree> current : initials) {
+            int size = current.size();
+            Map<String, String> result = iterate(current, unlabeled, test);
+            result.put("seedSize", size + "");
+            results.add(result);
+        }
+        return results;
+    }
+
+    private static List<List<Tree>> separateBrown() {
         List<Tree> unlabeled = new ArrayList<Tree>();
         List<Tree> test = new ArrayList<Tree>();
 
@@ -317,18 +366,13 @@ public class ActiveLeaner {
             unlabeled.addAll(data.get(0));
             test.addAll(data.get(1));
         }
-
-        for (List<Tree> current : initials) {
-            int size = current.size();
-            Map<String, String> result = iterate(current, unlabeled, wrapTreebank(test));
-            result.put("seedSize", size + "");
-            results.add(result);
-        }
-        printResults(results, writer);
-        System.out.println("Finished all seeds set.");
+        List<List<Tree>> result = new ArrayList<List<Tree>>(){};
+        result.add(unlabeled);
+        result.add(test);
+        return result;
     }
 
-    public static List<List<Tree>> brownTrainTest(String path) {
+    private static List<List<Tree>> brownTrainTest(String path) {
         MemoryTreebank brown = new MemoryTreebank();
         brown.loadPath(path);
         brown.textualSummary();
