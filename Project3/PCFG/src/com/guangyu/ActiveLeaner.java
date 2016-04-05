@@ -28,23 +28,23 @@ public class ActiveLeaner {
 
     private final static Options lpOptions = new Options();
 
-//    private final static int[] SEED_SIZE = {1000, 2000, 3000, 4000, 5000, 7000, 10000, 13000, 16000, 20000, 25000, 30000, 35000};
-    private final static int[] SEED_SIZE = {20, 40};
+    private final static int[] SEED_SIZE = {1000, 2000, 3000, 4000, 5000, 7000, 10000, 13000, 16000, 20000, 25000, 30000, 35000};
+//    private final static int[] SEED_SIZE = {20, 40};
 
-//    private final static int[] SELF_TRAINING = {1000, 2000, 3000, 4000, 5000, 7000, 10000, 13000, 17000, 21000};
-    private final static int[] SELF_TRAINING = {20, 40};
+    private final static int[] SELF_TRAINING = {1000, 2000, 3000, 4000, 5000, 7000, 10000, 13000, 17000, 21000};
+//    private final static int[] SELF_TRAINING = {20, 40};
 
-//    private final static String[] WSJ_DIRS = {"02", "03", "04", "05", "06", "07", "08", "09", "10", "11"
-//            , "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"};
-    private final static String[] WSJ_DIRS = {"02"};
+    private final static String[] WSJ_DIRS = {"02", "03", "04", "05", "06", "07", "08", "09", "10", "11"
+            , "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"};
+//    private final static String[] WSJ_DIRS = {"02"};
 
-//    private final static String[] BROWN_DIRS = {"cf", "cg", "ck", "cl", "cm", "cn", "cp", "cr"};
-    private final static String[] BROWN_DIRS = {"cf"};
+    private final static String[] BROWN_DIRS = {"cf", "cg", "ck", "cl", "cm", "cn", "cp", "cr"};
+//    private final static String[] BROWN_DIRS = {"cf"};
 
     private final static double RATE = 0.9;
 
-//    private final static int LABELED = 10000;
-    private final static int LABELED = 40;
+    private final static int LABELED = 10000;
+//    private final static int LABELED = 40;
 
     private final static String PATH = "/Users/cid-garry/Documents/NLP/hw3_corpus/";
 
