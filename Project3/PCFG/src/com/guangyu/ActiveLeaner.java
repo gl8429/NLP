@@ -1,6 +1,5 @@
 package com.guangyu;
 
-import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.parser.lexparser.EvaluateTreebank;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.parser.lexparser.Options;
