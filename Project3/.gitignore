@@ -3,3 +3,6 @@
 /PCFG/output_trace
 /PCFG/out
 /PCFG/.idea/workspace.xml
+/Report/*.aux
+/Report/*.synctex.gz
+/Report/*.log

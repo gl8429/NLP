@@ -1,0 +1,42 @@
+====== README ========
+
+@author: Guangyu Lin
+@email: glin@utexas.edu
+@eid: gl8429
+
+Title: Readme file of homework 3
+
+Files:
+        mycode/ActiveLearner.java // aggregated application
+        Report.pdf // report of homework 3
+        Output Trace // directory includes all output files
+	Output Trace/result // directory of all format result
+	Output Trace/trees // directory of some sample trees that generate during testing
+	lib // jars directory
+	com // easy for you to run
+
+How to run?
+        1.
+	  You could create a new project in IntelliJ, then add ActiveLearner.java into the `src` file,
+	  then you can create a new folder named `lib` and add `jars` in the lib folder into it and add
+	  all `jars` into your library and you JDK should be 8. 
+	  
+	  Then you can run ActiveLearner.java in your IntelliJ project directly.
+        2.
+          Then you can check the output in trace directory, which will contain
+		result // all formated result
+		trees // trees generated while testing
+	3.
+	  Additionally, you can also run this project by command line, by the following format,
+		`java -cp "stanford-parser.jar:slf4j-api.jar:" -server -mx1500m com.guangyu.ActiveLearner`
+	  Notice, you need to move all jars to HW3-Guangyu Lin folder.
+
+
+Output Trace?
+        The output trace will be generated automatically.
+        e.g. output_wsj_wsj_Brown.txt
+	seed set name, self training set name, test set name
+
+
+If you have any questions, please contact me directly ;)
+
