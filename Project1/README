@@ -3,17 +3,17 @@ EID: gl8429
 
 Directry Structure:
 --HW--|
+      |--README
       |--nlp--|
               |--lm--|
-                     |--README
        	             |--BackwardBigramModel.java(NEW)
                      |--BidirectionalBigramModel.java(NEW)
                      |--BigramModel.java(ORIGINAL)
                      |--BigramModel.java(ORIGINAL)
                      |--POSTaggedFile.java(ORIGINAL)
                      |--OutputTrace--|
-                                     |BackwardBigramModelResult
-                                     |--BidirectionalBigramModelResult
+                                     |BackwardBigramModelResult(NEW)
+                                     |--BidirectionalBigramModelResult(NEW)
                      |--report.pdf
 
 Description of each file:
